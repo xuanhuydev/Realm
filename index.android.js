@@ -11,18 +11,21 @@ const ItemSchema = {
   }
 };
 
-// RNFS.copyFileAssets('huy.realm',RNFS.DocumentDirectoryPath + '/huy.realm')
-// .then( ()=>{
-//   const realm = new Realm({
-//     path:RNFS.DocumentDirectoryPath + '/huy.realm',
-//     schema:[CarSchema]
-//   })
+RNFS.copyFileAssets('huy.realm', RNFS.DocumentDirectoryPath + '/huy.realm')
+  .then(() => {
+    const realm = new Realm({
+      path: RNFS.DocumentDirectoryPath + '/huynew.realm',
+      schema: [ItemSchema]
+    })
+    realm.write(() => {
+      realm.create('Item', { key: 22, tenLoi: 'day la ten loi', mucPhat: 'day la muc phat' })
+    })
 
-//   const people = realm.objects('Car')
-//   console.log('====================')
-//   console.log('lengh: '+people.length)
-//   console.log('====================')
-// } )
+    const cars = realm.objects('Item')
+    console.log('====================')
+    console.log('lengh: ' + cars.length)
+    console.log('====================')
+  })
 
 
 
@@ -32,7 +35,7 @@ export default class fs extends Component {
     super(props);
     this.state = {
       realm: null,
-      mang: []
+
     };
   }
 
@@ -43,18 +46,7 @@ export default class fs extends Component {
       .then((dataJson) => {
 
         dataJson.forEach((item) => {
-          Realm.open({
-            schema: [ItemSchema],
-            path: RNFS.DocumentDirectoryPath + '/huynew.realm'
-          }).then(realm => {
-            realm.write(() => {
-              realm.create('Item', item);
-            });
-            this.setState({ realm });
-          });
-        })
-        this.setState({
-          mang: dataJson
+          console.log('ahihi')
         })
       })
       .catch((e) => { console.log(e) })
@@ -70,11 +62,9 @@ export default class fs extends Component {
       <View style={styles.container}>
         <Text style={styles.welcome}>
           {info}
+          huy
         </Text>
-        <FlatList
-          data={this.state.mang}
-          renderItem={({item}) => <Text>{item.key}</Text>}
-          />
+
       </View>
     );
   }
